@@ -14,4 +14,4 @@ jobs:
     - name: Login to ghcr.io
       run:  echo ${{ secrets.REGISTRY }} | docker login ghcr.io --username dergeberl --password-stdin
     - name: push image
-      run: docker ghcr.io/dergeberl/multitool:main
+      run: docker push ghcr.io/dergeberl/multitool:main
