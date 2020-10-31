@@ -2,6 +2,8 @@ FROM ubuntu:20.10
 
 MAINTAINER dergeberl
 
+LABEL org.opencontainers.image.source https://github.com/dergeberl/multitool-container
+
 RUN apt update && \
       apt install -y --no-install-recommends  \
       bash \
