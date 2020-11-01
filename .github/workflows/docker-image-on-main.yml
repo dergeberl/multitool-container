@@ -9,9 +9,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag ghcr.io/dergeberl/multitool:main
-    - name: Login to ghcr.io
-      run:  echo ${{ secrets.REGISTRY }} | docker login ghcr.io --username dergeberl --password-stdin
-    - name: push image
-      run: docker push ghcr.io/dergeberl/multitool:main
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: docker/setup-buildx-action@v1
+      with:
+        buildx-version: latest
+        qemu-version: latest
+    - name: Available platforms
+      run: echo ${{ steps.buildx.outputs.platforms }}
+    #- name: Login to ghcr.io
+    #  run:  echo ${{ secrets.REGISTRY }} | docker login ghcr.io --username dergeberl --password-stdin
+    #- name: Build the Docker image
+    #  run: docker buildx . --file Dockerfile --output "type=image,push=true" --tag ghcr.io/dergeberl/multitool:main --platform linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
+    #- name: Build the Docker image
+    #  run: docker build . --file Dockerfile --tag ghcr.io/dergeberl/multitool:main
+    #- name: push image
+    #  run: docker push ghcr.io/dergeberl/multitool:main
