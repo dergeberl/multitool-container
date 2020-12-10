@@ -20,7 +20,11 @@ RUN apt update && \
       sysstat \
       vim \
       htop \
-      mtr && \
+      mtr \
+      ca-certificates && \
+    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg --output /etc/apt/trusted.gpg.d/k8s-apt-key.gpg && \
+    echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list && \
+    apt update && apt install -y kubectl && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
