@@ -1,0 +1,57 @@
+name: new-version
+
+on:
+  schedule:
+  - cron:  '0 8 1 * *'
+
+
+jobs:
+  new-tag:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: oprypin/find-latest-tag@v1
+      with:
+        repository: ${{ github.repository }}
+        releases-only: false  
+      id: previoustag  
+    - name: checkout tag
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ steps.previoustag.outputs.tag }}
+    - name: get sha from commit
+      id: tagcommitsha
+      run: echo "::set-output name=sha::$(git rev-parse HEAD)"
+    - name: 'Get next patch version'
+      id: semvers
+      uses: "WyriHaximus/github-action-next-semvers@v1"
+      with:
+        version: ${{ steps.previoustag.outputs.tag }}
+    - name: New Version
+      run: echo v${{ steps.semvers.outputs.patch }}
+    - name: Create tag
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{ secrets.REGISTRY }}
+        script: |
+          github.git.createRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: "refs/tags/v${{ steps.semvers.outputs.patch }}",
+            sha: "${{ steps.tagcommitsha.outputs.sha }}"
+          })
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ steps.semvers.outputs.patch }}
+        release_name: Release v${{ steps.semvers.outputs.patch }}
+        body: |
+          This is an automatic release to update the packages inside the container
+          The container image can be downloaded by ghrc.io and docker.io
+
+          `ghcr.io/${{ github.repository }}:v${{ steps.semvers.outputs.patch }}`
+          `${{ github.repository }}:v${{ steps.semvers.outputs.patch }}`
+        draft: false
+        prerelease: false
