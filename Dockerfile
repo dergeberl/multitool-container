@@ -5,6 +5,7 @@ MAINTAINER dergeberl
 LABEL org.opencontainers.image.source https://github.com/dergeberl/multitool-container
 
 RUN apt update && \
+      apt-get upgrade -y && \
       apt install -y --no-install-recommends  \
       bash \
       curl \
