@@ -1,7 +1,13 @@
 # multitool-container
 a container with useful tools for troubleshooting
 
-This images is available for the following arch:
+
+The container image can be downloaded by ghrc.io and docker.io
+
+`ghcr.io/dergeberl/multitool:v0.1.2`
+`dergeberl/multitool:v0.1.2`
+
+Available for the following arch:
 
 - amd64 
 - armv7
