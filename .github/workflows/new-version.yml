@@ -49,7 +49,7 @@ jobs:
         release_name: Release v${{ steps.semvers.outputs.patch }}
         body: |
           This is an automatic release to update the packages inside the container
-          The container image can be downloaded by ghrc.io and docker.io
+          The container image can be downloaded at ghrc.io and docker.io
 
           `ghcr.io/dergeberl/multitool:v${{ steps.semvers.outputs.patch }}`
           `dergeberl/multitool:v${{ steps.semvers.outputs.patch }}`
