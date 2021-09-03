@@ -4,8 +4,8 @@ a container with useful tools for troubleshooting
 
 The container image can be downloaded by ghrc.io and docker.io
 
-`ghcr.io/dergeberl/multitool:v0.1.2`
-`dergeberl/multitool:v0.1.2`
+`ghcr.io/dergeberl/multitool:main`
+`dergeberl/multitool:main`
 
 Available for the following arch:
 
