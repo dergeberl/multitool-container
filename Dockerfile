@@ -1,11 +1,11 @@
-FROM ubuntu:21.10
+FROM ubuntu:21.04
 
 MAINTAINER dergeberl
 
 LABEL org.opencontainers.image.source https://github.com/dergeberl/multitool-container
 
 RUN apt update && \
-      apt-get upgrade -y && \
+      aptget upgrade -y && \
       apt install -y --no-install-recommends  \
       bash \
       curl \
