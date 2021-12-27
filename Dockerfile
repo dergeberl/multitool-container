@@ -21,6 +21,7 @@ RUN apt update && \
       sysstat \
       iftop \
       iotop \
+      lsof \
       vim \
       htop \
       mtr \
