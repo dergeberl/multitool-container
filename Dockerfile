@@ -19,6 +19,8 @@ RUN apt update && \
       iputils-ping \
       netcat-openbsd \
       sysstat \
+      iftop \
+      iotop \
       vim \
       htop \
       mtr \
