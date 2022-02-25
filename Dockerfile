@@ -1,4 +1,5 @@
-FROM ubuntu:21.04
+### base container image
+FROM ubuntu:21.04 AS base
 
 MAINTAINER dergeberl
 
@@ -10,21 +11,46 @@ RUN apt update && \
       bash \
       curl \
       wget \
+      vim \
+      nano \
+      htop \
+      iputils-ping && \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get clean
+
+ENTRYPOINT ["sleep", "infinity"]
+
+
+### nettools container image
+FROM base AS net
+
+RUN apt update && \
+      apt upgrade -y && \
+      apt install -y --no-install-recommends  \
       socat \
       tcpdump \
       dnsutils  \
       nmap \
       net-tools \
       ethtool \
-      iputils-ping \
       netcat-openbsd \
       sysstat \
       iftop \
       iotop \
       lsof \
-      vim \
-      htop \
-      mtr \
+      mtr && \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get clean
+
+ENTRYPOINT ["sleep", "infinity"]
+
+
+### kubectl container image
+FROM base AS kubectl
+
+RUN apt update && \
+      apt upgrade -y && \
+      apt install -y --no-install-recommends  \
       ca-certificates && \
     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg --output /etc/apt/trusted.gpg.d/k8s-apt-key.gpg && \
     echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list && \
