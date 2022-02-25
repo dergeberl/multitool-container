@@ -1,5 +1,5 @@
 ### base container image
-FROM ubuntu:21.04 AS base
+FROM ubuntu:21.10 AS base
 
 MAINTAINER dergeberl
 
@@ -25,7 +25,6 @@ ENTRYPOINT ["sleep", "infinity"]
 FROM base AS net
 
 RUN apt update && \
-      apt upgrade -y && \
       apt install -y --no-install-recommends  \
       socat \
       tcpdump \
@@ -49,7 +48,6 @@ ENTRYPOINT ["sleep", "infinity"]
 FROM base AS kubectl
 
 RUN apt update && \
-      apt upgrade -y && \
       apt install -y --no-install-recommends  \
       ca-certificates && \
     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg --output /etc/apt/trusted.gpg.d/k8s-apt-key.gpg && \
