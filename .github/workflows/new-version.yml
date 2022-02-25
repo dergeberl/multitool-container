@@ -51,7 +51,16 @@ jobs:
           This is an automatic release to update the packages inside the container
           The container image can be downloaded at ghrc.io and docker.io
 
+          Basic container:
           `ghcr.io/dergeberl/multitool:v${{ steps.semvers.outputs.patch }}`
           `dergeberl/multitool:v${{ steps.semvers.outputs.patch }}`
+
+          Network container:
+          `ghcr.io/dergeberl/multitool-net:v${{ steps.semvers.outputs.patch }}`
+          `dergeberl/multitool-net:v${{ steps.semvers.outputs.patch }}`
+
+          Kubectl container
+          `ghcr.io/dergeberl/multitool-kubectl:v${{ steps.semvers.outputs.patch }}`
+          `dergeberl/multitool-kubectl:v${{ steps.semvers.outputs.patch }}`
         draft: false
         prerelease: false

@@ -1,13 +1,55 @@
 # multitool-container
-a container with useful tools for troubleshooting
+Three containers with useful tools for troubleshooting. 
 
+## basic container
+
+This container has the following tools/packages installed:
+- bash
+- curl
+- wget
+- vim
+- nano
+- iputils-ping
+- htop
 
 The container image can be downloaded by ghrc.io and docker.io
 
-`ghcr.io/dergeberl/multitool:main`
-`dergeberl/multitool:main`
+`ghcr.io/dergeberl/multitool:latest`
+`dergeberl/multitool:latest`
 
-Available for the following arch:
+## network container
+
+The following tools/packages are installed in this container in addition to the basic container:
+- socat \
+- tcpdump
+- dnsutils 
+- nmap
+- net-tools
+- ethtool
+- netcat-openbsd
+- sysstat
+- iftop
+- iotop
+- lsof
+- mtr
+
+The container image can be downloaded by ghrc.io and docker.io
+
+`ghcr.io/dergeberl/multitool-net:latest`
+`dergeberl/multitool-net:latest`
+
+## network container
+
+The following tools/packages are installed in this container in addition to the basic container:
+- kubectl
+
+The container image can be downloaded by ghrc.io and docker.io
+
+`ghcr.io/dergeberl/multitool-kubectl:latest`
+`dergeberl/multitool-kubectl:latest`
+
+
+All containers are available for the following arch:
 
 - amd64 
 - armv7

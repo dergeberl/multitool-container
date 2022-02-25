@@ -6,17 +6,35 @@ on:
   push:
     branches:
     - main
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Docker meta
-      id: docker_meta
+    - name: Docker meta base
+      id: docker_meta_base
       uses: crazy-max/ghaction-docker-meta@v1
       with:
         images: ghcr.io/dergeberl/multitool,dergeberl/multitool
+        tag-semver: |
+            {{version}}
+            {{major}}.{{minor}}
+    - name: Docker meta net
+      id: docker_meta_net
+      uses: crazy-max/ghaction-docker-meta@v1
+      with:
+        images: ghcr.io/dergeberl/multitool-net,dergeberl/multitool-net
+        tag-semver: |
+            {{version}}
+            {{major}}.{{minor}}
+    - name: Docker meta kubectl
+      id: docker_meta_kubectl
+      uses: crazy-max/ghaction-docker-meta@v1
+      with:
+        images: ghcr.io/dergeberl/multitool-kubectl,dergeberl/multitool-kubectl
         tag-semver: |
             {{version}}
             {{major}}.{{minor}}
@@ -40,13 +58,36 @@ jobs:
       with:
         username: ${{ github.repository_owner }}
         password: ${{ secrets.DOCKER_HUB_TOKEN }}
-    - name: Build and push
-      id: docker_build
+    - name: Build and push basic image
+      id: docker_build_basic
       uses: docker/build-push-action@v2
       with:
         context: .
         file: ./Dockerfile
         platforms: linux/amd64,linux/arm/v7,linux/arm64
         push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.docker_meta.outputs.tags }}
-        labels: ${{ steps.docker_meta.outputs.labels }}
+        tags: ${{ steps.docker_meta_base.outputs.tags }}
+        labels: ${{ steps.docker_meta_base.outputs.labels }}
+        target: base
+    - name: Build and push network image
+      id: docker_build_net
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: ./Dockerfile
+        platforms: linux/amd64,linux/arm/v7,linux/arm64
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.docker_meta_net.outputs.tags }}
+        labels: ${{ steps.docker_meta_net.outputs.labels }}
+        target: net
+    - name: Build and push kubectl image
+      id: docker_build_kubectl
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: ./Dockerfile
+        platforms: linux/amd64,linux/arm/v7,linux/arm64
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.docker_meta_kubectl.outputs.tags }}
+        labels: ${{ steps.docker_meta_kubectl.outputs.labels }}
+        target: kubectl
