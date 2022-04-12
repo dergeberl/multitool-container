@@ -8,6 +8,7 @@ LABEL org.opencontainers.image.source https://github.com/dergeberl/multitool-con
 RUN apt update && \
       apt upgrade -y && \
       apt install -y --no-install-recommends  \
+      ca-certificates \
       bash \
       curl \
       wget \
@@ -47,10 +48,7 @@ ENTRYPOINT ["sleep", "infinity"]
 ### kubectl container image
 FROM base AS kubectl
 
-RUN apt update && \
-      apt install -y --no-install-recommends  \
-      ca-certificates && \
-    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg --output /etc/apt/trusted.gpg.d/k8s-apt-key.gpg && \
+RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg --output /etc/apt/trusted.gpg.d/k8s-apt-key.gpg && \
     echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list && \
     apt update && apt install -y kubectl && \
     rm -rf /var/lib/apt/lists/* && \
