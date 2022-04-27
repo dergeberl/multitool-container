@@ -5,6 +5,9 @@ MAINTAINER dergeberl
 
 LABEL org.opencontainers.image.source https://github.com/dergeberl/multitool-container
 
+COPY bash_aliases /root/.bash_aliases
+COPY bash_banner /root/.bash_banner
+
 RUN apt update && \
       apt upgrade -y && \
       apt install -y --no-install-recommends  \
@@ -16,10 +19,10 @@ RUN apt update && \
       nano \
       htop \
       iputils-ping && \
+    echo "cat ~/.bash_banner" >> /root/.bashrc && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
-ENTRYPOINT ["sleep", "infinity"]
 
 
 ### nettools container image
