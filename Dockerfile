@@ -23,6 +23,7 @@ RUN apt update && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
+ENTRYPOINT ["sleep", "infinity"]
 
 
 ### nettools container image
