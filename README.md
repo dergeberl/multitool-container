@@ -42,7 +42,7 @@ The container image can be downloaded by ghrc.io and docker.io
 `ghcr.io/dergeberl/multitool-net:latest`
 `dergeberl/multitool-net:latest`
 
-## network container
+## kubectl container
 
 The following tools/packages are installed in this container in addition to the basic container:
 - kubectl
