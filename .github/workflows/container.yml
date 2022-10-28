@@ -16,7 +16,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Docker meta base
       id: docker_meta_base
-      uses: crazy-max/ghaction-docker-meta@v1
+      uses: crazy-max/ghaction-docker-meta@v4
       with:
         images: ghcr.io/dergeberl/multitool,dergeberl/multitool
         tag-semver: |
@@ -24,7 +24,7 @@ jobs:
             {{major}}.{{minor}}
     - name: Docker meta net
       id: docker_meta_net
-      uses: crazy-max/ghaction-docker-meta@v1
+      uses: crazy-max/ghaction-docker-meta@v4
       with:
         images: ghcr.io/dergeberl/multitool-net,dergeberl/multitool-net
         tag-semver: |
@@ -32,7 +32,7 @@ jobs:
             {{major}}.{{minor}}
     - name: Docker meta kubectl
       id: docker_meta_kubectl
-      uses: crazy-max/ghaction-docker-meta@v1
+      uses: crazy-max/ghaction-docker-meta@v4
       with:
         images: ghcr.io/dergeberl/multitool-kubectl,dergeberl/multitool-kubectl
         tag-semver: |
