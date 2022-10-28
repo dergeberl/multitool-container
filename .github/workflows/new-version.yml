@@ -9,14 +9,14 @@ jobs:
   new-tag:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: oprypin/find-latest-tag@v1
       with:
         repository: ${{ github.repository }}
         releases-only: false  
       id: previoustag  
     - name: checkout tag
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: ${{ steps.previoustag.outputs.tag }}
     - name: get sha from commit
