@@ -30,7 +30,7 @@ jobs:
     - name: New Version
       run: echo v${{ steps.semvers.outputs.patch }}
     - name: Create tag
-      uses: actions/github-script@v3
+      uses: actions/github-script@v6
       with:
         github-token: ${{ secrets.REGISTRY }}
         script: |
