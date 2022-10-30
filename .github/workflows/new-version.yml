@@ -8,6 +8,8 @@ on:
 jobs:
   new-tag:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
     - uses: actions/checkout@v3
     - uses: oprypin/find-latest-tag@v1
@@ -30,23 +32,23 @@ jobs:
     - name: New Version
       run: echo v${{ steps.semvers.outputs.patch }}
     - name: Create tag
-      uses: actions/github-script@v3
+      uses: actions/github-script@v6
       with:
         github-token: ${{ secrets.REGISTRY }}
         script: |
-          github.git.createRef({
+          github.rest.git.createRef({
             owner: context.repo.owner,
             repo: context.repo.repo,
             ref: "refs/tags/v${{ steps.semvers.outputs.patch }}",
             sha: "${{ steps.tagcommitsha.outputs.sha }}"
           })
     - name: Create Release
-      uses: actions/create-release@v1
+      uses: ncipollo/release-action@v1
       env:
         GITHUB_TOKEN: ${{ secrets.REGISTRY }}
       with:
-        tag_name: v${{ steps.semvers.outputs.patch }}
-        release_name: Release v${{ steps.semvers.outputs.patch }}
+        tag: v${{ steps.semvers.outputs.patch }}
+        name: Release v${{ steps.semvers.outputs.patch }}
         body: |
           This is an automatic release to update the packages inside the container
           The container image can be downloaded at ghrc.io and docker.io
