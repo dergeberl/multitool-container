@@ -2,53 +2,46 @@ name: new-version
 
 on:
   schedule:
-  - cron:  '0 8 1 * *'
-
+  - cron:  '0 15 1 * *'
 
 jobs:
   new-tag:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-    - uses: actions/checkout@v3
-    - uses: oprypin/find-latest-tag@v1
+    - name: Find last tag
+      uses: oprypin/find-latest-tag@v1
       with:
         repository: ${{ github.repository }}
         releases-only: false  
-      id: previoustag  
-    - name: checkout tag
+      id: previousTag  
+    - name: Checkout previous tag
       uses: actions/checkout@v3
       with:
-        ref: ${{ steps.previoustag.outputs.tag }}
-    - name: get sha from commit
-      id: tagcommitsha
-      run: echo "::set-output name=sha::$(git rev-parse HEAD)"
-    - name: 'Get next patch version'
-      id: semvers
-      uses: "WyriHaximus/github-action-next-semvers@v1"
+        ref: ${{ steps.previousTag.outputs.tag }}
+        token: ${{ secrets.GH_PAT }}
+    - name: Get sha from commit
+      id: tagCommitSHA
+      run: echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+    - name: Get next patch version
+      id: nextTag
+      env: 
+        TAG: ${{ steps.previousTag.outputs.tag }}
+      run: |
+        wget -O ./semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/master/src/semver
+        chmod +x ./semver
+        echo "nextPatch=$(./semver bump patch $TAG)" >> $GITHUB_OUTPUT
+    - name: Create new tag
+      uses: rickstaa/action-create-tag@v1
       with:
-        version: ${{ steps.previoustag.outputs.tag }}
-    - name: New Version
-      run: echo v${{ steps.semvers.outputs.patch }}
-    - name: Create tag
-      uses: actions/github-script@v6
-      with:
-        github-token: ${{ secrets.REGISTRY }}
-        script: |
-          github.rest.git.createRef({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            ref: "refs/tags/v${{ steps.semvers.outputs.patch }}",
-            sha: "${{ steps.tagcommitsha.outputs.sha }}"
-          })
+        tag: v${{ steps.nextTag.outputs.nextPatch }}
+        commit_sha: ${{ steps.tagCommitSHA.outputs.sha }}
+        message: ""
     - name: Create Release
       uses: ncipollo/release-action@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.REGISTRY }}
       with:
-        tag: v${{ steps.semvers.outputs.patch }}
-        name: Release v${{ steps.semvers.outputs.patch }}
+        token: ${{ secrets.GH_PAT }}
+        tag: v${{ steps.nextTag.outputs.nextPatch }}
+        name: Release v${{ steps.nexttag.outputs.nextPatch }}
         body: |
           This is an automatic release to update the packages inside the container
           The container image can be downloaded at ghrc.io and docker.io
