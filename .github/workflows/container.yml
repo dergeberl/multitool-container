@@ -19,25 +19,34 @@ jobs:
       uses: docker/metadata-action@v4
       with:
         images: ghcr.io/dergeberl/multitool,dergeberl/multitool
-        tag-semver: |
-            {{version}}
-            {{major}}.{{minor}}
+        tags: |
+          type=ref,event=branch
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=semver,pattern=v{{version}}
+          type=semver,pattern=v{{major}}.{{minor}}
     - name: Docker meta net
       id: docker_meta_net
       uses: docker/metadata-action@v4
       with:
         images: ghcr.io/dergeberl/multitool-net,dergeberl/multitool-net
-        tag-semver: |
-            {{version}}
-            {{major}}.{{minor}}
+        tags: |
+          type=ref,event=branch
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=semver,pattern=v{{version}}
+          type=semver,pattern=v{{major}}.{{minor}}
     - name: Docker meta kubectl
       id: docker_meta_kubectl
       uses: docker/metadata-action@v4
       with:
         images: ghcr.io/dergeberl/multitool-kubectl,dergeberl/multitool-kubectl
-        tag-semver: |
-            {{version}}
-            {{major}}.{{minor}}
+        tags: |
+          type=ref,event=branch
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=semver,pattern=v{{version}}
+          type=semver,pattern=v{{major}}.{{minor}}
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
       with:
