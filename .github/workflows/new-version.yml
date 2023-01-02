@@ -48,15 +48,15 @@ jobs:
           The container image can be downloaded at ghrc.io and docker.io
 
           Basic container:
-          `ghcr.io/dergeberl/multitool:${{ steps.semvers.outputs.patch }}`
-          `dergeberl/multitool:${{ steps.semvers.outputs.patch }}`
+          `ghcr.io/dergeberl/multitool:v${{ steps.nextTag.outputs.nextPatch }}`
+          `dergeberl/multitool:v${{ steps.nextTag.outputs.nextPatch }}`
 
           Network container:
-          `ghcr.io/dergeberl/multitool-net:${{ steps.semvers.outputs.patch }}`
-          `dergeberl/multitool-net:${{ steps.semvers.outputs.patch }}`
+          `ghcr.io/dergeberl/multitool-net:v${{ steps.nextTag.outputs.nextPatch }}`
+          `dergeberl/multitool-net:v${{ steps.nextTag.outputs.nextPatch }}`
 
           Kubectl container
-          `ghcr.io/dergeberl/multitool-kubectl:${{ steps.semvers.outputs.patch }}`
-          `dergeberl/multitool-kubectl:${{ steps.semvers.outputs.patch }}`
+          `ghcr.io/dergeberl/multitool-kubectl:v${{ steps.nextTag.outputs.nextPatch }}`
+          `dergeberl/multitool-kubectl:v${{ steps.nextTag.outputs.nextPatch }}`
         draft: false
         prerelease: false
