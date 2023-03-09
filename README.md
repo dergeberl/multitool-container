@@ -1,7 +1,7 @@
 # multitool-container
 
 ![GitHub release](https://img.shields.io/github/v/release/dergeberl/multitool-container)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/dergeberl/multitool-container/build-container)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/dergeberl/multitool-container/container.yml?branch=main)
 
 Three containers with useful tools for troubleshooting. 
 
