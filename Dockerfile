@@ -52,8 +52,9 @@ ENTRYPOINT ["sleep", "infinity"]
 ### kubectl container image
 FROM base AS kubectl
 
-RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg --output /etc/apt/trusted.gpg.d/k8s-apt-key.gpg && \
-    echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list && \
+RUN apt update && apt install -y gnupg2 && \
+    curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /etc/apt/keyrings/kubernetes-archive-keyring.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list && \
     apt update && apt install -y kubectl && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
