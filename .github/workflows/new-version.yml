@@ -16,7 +16,7 @@ jobs:
         releases-only: false  
       id: previousTag  
     - name: Checkout previous tag
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         ref: ${{ steps.previousTag.outputs.tag }}
         token: ${{ secrets.GH_PAT }}
