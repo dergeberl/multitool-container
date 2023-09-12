@@ -71,7 +71,7 @@ jobs:
         password: ${{ secrets.DOCKER_HUB_TOKEN }}
     - name: Build and push basic image
       id: docker_build_basic
-      uses: docker/build-push-action@v4
+      uses: docker/build-push-action@v5
       with:
         context: .
         file: ./Dockerfile
@@ -82,7 +82,7 @@ jobs:
         target: base
     - name: Build and push network image
       id: docker_build_net
-      uses: docker/build-push-action@v4
+      uses: docker/build-push-action@v5
       with:
         context: .
         file: ./Dockerfile
@@ -93,7 +93,7 @@ jobs:
         target: net
     - name: Build and push kubectl image
       id: docker_build_kubectl
-      uses: docker/build-push-action@v4
+      uses: docker/build-push-action@v5
       with:
         context: .
         file: ./Dockerfile
