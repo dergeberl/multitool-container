@@ -1,5 +1,5 @@
 ### base container image
-FROM ubuntu:23.04 AS base
+FROM ubuntu:24.04 AS base
 
 MAINTAINER dergeberl
 
