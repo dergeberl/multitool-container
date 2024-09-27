@@ -63,21 +63,12 @@ All containers are available for the following arch:
 ## usage docker
 
 ```bash
-docker run --rm -d --name multitool ghcr.io/dergeberl/multitool:latest
-docker exec -it multitool /bin/bash
-```
-
-```bash
-docker stop multitool
+docker run --rm -it --name multitool ghcr.io/dergeberl/multitool:latest /bin/bash
 ```
 
 ## usage kubernetes
 
 ```bash
-kubectl run --image ghcr.io/dergeberl/multitool:latest multitool
-kubectl exec multitool -it -- /bin/bash
+kubectl run -i --tty --image ghcr.io/dergeberl/multitool:latest multitool -- /bin/bash
 ```
 
-```bash
-kubectl delete pod multitool
-```
