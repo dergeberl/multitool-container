@@ -23,7 +23,7 @@ RUN apt update && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
-ENTRYPOINT ["sleep", "infinity"]
+CMD ["/bin/sleep", "infinity"]
 
 
 ### nettools container image
@@ -46,7 +46,7 @@ RUN apt update && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
-ENTRYPOINT ["sleep", "infinity"]
+CMD ["/bin/sleep", "infinity"]
 
 
 ### kubectl container image
@@ -59,4 +59,4 @@ RUN apt update && apt install -y gnupg2  && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
-ENTRYPOINT ["sleep", "infinity"]
+CMD ["/bin/sleep", "infinity"]
