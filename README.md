@@ -72,3 +72,18 @@ docker run --rm -it --name multitool ghcr.io/dergeberl/multitool:latest /bin/bas
 kubectl run -i --tty --image ghcr.io/dergeberl/multitool:latest multitool -- /bin/bash
 ```
 
+### ephemeral container (`kubectl debug`)
+
+Start a ephemeral container in an existing pod with the `kubectl debug` command. 
+Checkout kubernetes docs: https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/#ephemeral-containe
+
+
+The following commands adds ephemeral container in with a bash:
+```bash
+kubectl debug -iq --image=ghcr.io/dergeberl/multitool:latest <podname> -- /bin/bash
+```
+
+The following commands adds ephemeral container in with a `tcpdump` and pipes the output directly to `wireshark`:
+```bash
+kubectl debug -iq --image=ghcr.io/dergeberl/multitool-net:latest <podname> -- tcpdump -i any -w - |  wireshark -k -i -
+```
