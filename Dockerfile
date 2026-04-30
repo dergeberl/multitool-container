@@ -1,9 +1,8 @@
 ### base container image
 FROM ubuntu:26.04 AS base
 
-MAINTAINER dergeberl
-
-LABEL org.opencontainers.image.source https://github.com/dergeberl/multitool-container
+LABEL org.opencontainers.image.authors="dergeberl"
+LABEL org.opencontainers.image.source=https://github.com/dergeberl/multitool-container
 
 COPY bash_aliases /root/.bash_aliases
 COPY bash_banner /root/.bash_banner
