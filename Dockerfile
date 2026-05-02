@@ -51,9 +51,10 @@ CMD ["sleep", "infinity"]
 ### kubectl container image
 FROM base AS kubectl
 
-RUN apt update && apt install -y gnupg2  && \
-    curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg && \
-    echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /' > /etc/apt/sources.list.d/kubernetes.list && \
+RUN apt update && apt install -y gnupg2 apt-transport-https && \
+    K8S_MINOR_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt | grep -oE '^v[0-9]+\.[0-9]+') && \
+    curl -fsSL https://pkgs.k8s.io/core:/stable:/${K8S_MINOR_VERSION}/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/${K8S_MINOR_VERSION}/deb/ /" > /etc/apt/sources.list.d/kubernetes.list && \
     apt update && apt install -y kubectl && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
