@@ -3,9 +3,15 @@
 ![GitHub release](https://img.shields.io/github/v/release/dergeberl/multitool-container)
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/dergeberl/multitool-container/container.yml?branch=main)
 
-Three containers with useful tools for troubleshooting. 
+Three containers with useful tools for troubleshooting. All container images are based on **Ubuntu**.
 
-## basic container
+All containers are available for the following architectures:
+
+- amd64 
+- armv7
+- arm64
+
+## Basic Container
 
 This container has the following tools/packages installed:
 - bash
@@ -16,12 +22,12 @@ This container has the following tools/packages installed:
 - iputils-ping
 - htop
 
-The container image can be downloaded by ghrc.io and docker.io
+The container image can be downloaded from ghcr.io and docker.io:
 
 `ghcr.io/dergeberl/multitool:latest`
 `dergeberl/multitool:latest`
 
-## network container
+## Network Container
 
 The following tools/packages are installed in this container in addition to the basic container:
 - socat
@@ -37,53 +43,52 @@ The following tools/packages are installed in this container in addition to the 
 - lsof
 - mtr
 
-The container image can be downloaded by ghrc.io and docker.io
+The container image can be downloaded from ghcr.io and docker.io:
 
 `ghcr.io/dergeberl/multitool-net:latest`
 `dergeberl/multitool-net:latest`
 
-## kubectl container
+## Kubectl Container
 
 The following tools/packages are installed in this container in addition to the basic container:
 - kubectl
 
-The container image can be downloaded by ghrc.io and docker.io
+The container image can be downloaded from ghcr.io and docker.io:
 
 `ghcr.io/dergeberl/multitool-kubectl:latest`
 `dergeberl/multitool-kubectl:latest`
 
-
-All containers are available for the following arch:
-
-- amd64 
-- armv7
-- arm64
-
-
-## usage docker
-
+## Usage: Docker
 ```bash
 docker run --rm -it --name multitool ghcr.io/dergeberl/multitool:latest /bin/bash
 ```
 
-## usage kubernetes
+## Usage: Kubernetes
 
 ```bash
 kubectl run -i --tty --image ghcr.io/dergeberl/multitool:latest multitool -- /bin/bash
 ```
 
-### ephemeral container (`kubectl debug`)
+### Ephemeral Container (`kubectl debug`)
 
-Start a ephemeral container in an existing pod with the `kubectl debug` command. 
-Checkout kubernetes docs: https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/#ephemeral-containe
+Start an ephemeral container in an existing pod with the `kubectl debug` command. 
+Check out the Kubernetes docs: https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/#ephemeral-containers
 
-
-The following commands adds ephemeral container in with a bash:
+The following command adds an ephemeral container running `bash`:
 ```bash
 kubectl debug -iq --image=ghcr.io/dergeberl/multitool:latest <podname> -- /bin/bash
 ```
 
-The following commands adds ephemeral container in with a `tcpdump` and pipes the output directly to `wireshark`:
+The following command adds an ephemeral container running `tcpdump` and pipes the output directly to `wireshark`:
 ```bash
 kubectl debug -iq --image=ghcr.io/dergeberl/multitool-net:latest <podname> -- tcpdump -i any -w - |  wireshark -k -i -
 ```
+
+### Node-Shell (`kubectl debug`)
+
+You can also use the multitool container as a node-shell to debug a Kubernetes node:
+```bash
+kubectl debug node/<nodename> -it --image=ghcr.io/dergeberl/multitool --profile=sysadmin --quiet -- chroot /host /bin/bash
+```
+
+> Note: On some nodes, `/bin/bash` may not be available. If the command fails, try using `/bin/sh` instead.
