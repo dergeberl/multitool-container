@@ -1,3 +1,2 @@
 ignored:
   - DL3008  # pin apt package versions: this container intentionally tracks latest package versions
-  - DL3015  # --no-install-recommends: gnupg2/apt-transport-https need recommends in the kubectl stage
