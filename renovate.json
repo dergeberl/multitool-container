@@ -14,5 +14,22 @@
       "datasourceTemplate": "docker",
       "depNameTemplate": "registry.k8s.io/kubectl"
     }
+  ],
+  "packageRules": [
+    {
+      "description": "Auto-merge kubectl version bumps (all version levels)",
+      "matchManagers": [
+        "regex"
+      ],
+      "matchDepNames": [
+        "registry.k8s.io/kubectl"
+      ],
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": true,
+      "labels": [
+        "automerge"
+      ]
+    }
   ]
 }
