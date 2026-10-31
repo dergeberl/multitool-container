@@ -1,0 +1,24 @@
+name: lint
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@v7
+    - name: Lint Dockerfile with hadolint
+      uses: hadolint/hadolint-action@v3.1.0
+      with:
+        dockerfile: Dockerfile
+    - name: Lint workflows with actionlint
+      uses: rhysd/actionlint@v1.7.8
