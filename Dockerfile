@@ -1,3 +1,5 @@
+ARG KUBECTL_TAG=v1.37.2
+
 ### base container image
 FROM ubuntu:26.04 AS base
 
@@ -49,7 +51,6 @@ CMD ["sleep", "infinity"]
 
 
 ### kubectl container image
-ARG KUBECTL_TAG=v1.37.2
 FROM registry.k8s.io/kubectl:${KUBECTL_TAG} AS kubectl-source
 
 FROM base AS kubectl
