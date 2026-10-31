@@ -30,7 +30,7 @@ jobs:
       run: |
         wget -O ./semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/master/src/semver
         chmod +x ./semver
-        echo "nextPatch=$(./semver bump patch $TAG)" >> "$GITHUB_OUTPUT"
+        echo "nextPatch=$(./semver bump patch "$TAG")" >> "$GITHUB_OUTPUT"
     - name: Create new tag
       uses: rickstaa/action-create-tag@v1
       with:
