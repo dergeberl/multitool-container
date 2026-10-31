@@ -7,9 +7,9 @@ LABEL org.opencontainers.image.source=https://github.com/dergeberl/multitool-con
 COPY bash_aliases /root/.bash_aliases
 COPY bash_banner /root/.bash_banner
 
-RUN apt update && \
-      apt upgrade -y && \
-      apt install -y --no-install-recommends  \
+RUN apt-get update && \
+      apt-get upgrade -y && \
+      apt-get install -y --no-install-recommends  \
       ca-certificates \
       bash \
       curl \
@@ -28,8 +28,8 @@ CMD ["sleep", "infinity"]
 ### nettools container image
 FROM base AS net
 
-RUN apt update && \
-      apt install -y --no-install-recommends  \
+RUN apt-get update && \
+      apt-get install -y --no-install-recommends  \
       socat \
       tcpdump \
       dnsutils  \
@@ -51,11 +51,13 @@ CMD ["sleep", "infinity"]
 ### kubectl container image
 FROM base AS kubectl
 
-RUN apt update && apt install -y gnupg2 apt-transport-https && \
-    K8S_MINOR_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt | grep -oE '^v[0-9]+\.[0-9]+') && \
-    curl -fsSL https://pkgs.k8s.io/core:/stable:/${K8S_MINOR_VERSION}/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg && \
-    echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/${K8S_MINOR_VERSION}/deb/ /" > /etc/apt/sources.list.d/kubernetes.list && \
-    apt update && apt install -y kubectl && \
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+RUN apt-get update && apt-get install -y gnupg2 apt-transport-https && \
+    K8S_MINOR_VERSION=$(curl -fsSL https://dl.k8s.io/release/stable.txt | grep -oE '^v[0-9]+\.[0-9]+') && \
+    curl -fsSL "https://pkgs.k8s.io/core:/stable:${K8S_MINOR_VERSION}/deb/Release.key" | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:${K8S_MINOR_VERSION}/deb/ /" > /etc/apt/sources.list.d/kubernetes.list && \
+    apt-get update && apt-get install -y kubectl && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
