@@ -49,10 +49,11 @@ CMD ["sleep", "infinity"]
 
 
 ### kubectl container image
+ARG KUBECTL_TAG=v1.37.2
+FROM registry.k8s.io/kubectl:${KUBECTL_TAG} AS kubectl-source
+
 FROM base AS kubectl
 
-ARG KUBECTL_TAG=v1.37.2
-
-COPY --from=registry.k8s.io/kubectl:${KUBECTL_TAG} /bin/kubectl /usr/local/bin/kubectl
+COPY --from=kubectl-source /bin/kubectl /usr/local/bin/kubectl
 
 CMD ["sleep", "infinity"]
