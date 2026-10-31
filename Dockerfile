@@ -53,11 +53,11 @@ FROM base AS kubectl
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-RUN apt-get update && apt-get install -y gnupg2 apt-transport-https && \
+RUN apt-get update && apt-get install -y --no-install-recommends gnupg2 apt-transport-https && \
     K8S_MINOR_VERSION=$(curl --retry 5 --retry-all-errors --retry-delay 5 -fsSL https://dl.k8s.io/release/stable.txt | grep -oE '^v[0-9]+\.[0-9]+') && \
     curl --retry 5 --retry-all-errors --retry-delay 5 -fsSL "https://pkgs.k8s.io/core:/stable:${K8S_MINOR_VERSION}/deb/Release.key" | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg && \
     echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:${K8S_MINOR_VERSION}/deb/ /" > /etc/apt/sources.list.d/kubernetes.list && \
-    apt-get update && apt-get install -y kubectl && \
+    apt-get update && apt-get install -y --no-install-recommends kubectl && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
