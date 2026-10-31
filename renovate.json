@@ -31,5 +31,9 @@
         "automerge"
       ]
     }
-  ]
+  ],
+  "pinDigests": true,
+  "pin": {
+    "enabled": true
+  }
 }
