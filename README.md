@@ -92,3 +92,37 @@ kubectl debug node/<nodename> -it --image=ghcr.io/dergeberl/multitool --profile=
 ```
 
 > Note: On some nodes, `/bin/bash` may not be available. If the command fails, try using `/bin/sh` instead.
+## Build and Release
+
+The container images are built and published by GitHub Actions in
+[.github/workflows](.github/workflows):
+
+- **`lint`**: runs `hadolint` on the Dockerfile and `actionlint` on all
+  workflows for every PR and push to `main`.
+- **`build-container`** (`container.yml`): builds all three images
+  (multi-arch: amd64, arm/v7, arm64) and pushes them to ghcr.io and
+  Docker Hub on every push to `main` (tagged `main`) and via the
+  reusable release path below. Pull requests only build, they don't
+  push. Builds use the GitHub Actions build cache and publish SLSA
+  provenance and SBOM attestations with each pushed image.
+- **`release`** (`release.yml`):
+  - **Automatic patch releases**: a monthly schedule creates a patch
+    release. It builds from the **last tagged commit** (not from
+    `main`), so a patch release only updates the packages inside the
+    images (new Ubuntu base packages) and never includes unreleased
+    repository changes.
+  - **Manual minor/major releases**: run the `release` workflow via
+    *Run workflow* and choose `minor` or `major` as the bump level.
+    These build from the current `main` HEAD. The tag, the GitHub
+    Release and the release notes (including the image list) are
+    created fully automatically after the images are built and pushed
+    successfully — no manual steps required.
+
+All releases get the image list with all image names in the release
+notes, generated automatically from the release version. Image tags for
+a release `vX.Y.Z` are `vX.Y.Z`, `X.Y.Z`, `X.Y` and `vX.Y` for each
+image, plus the `main` tag for the latest build of `main`.
+
+kubectl is copied from the official `registry.k8s.io/kubectl` image;
+its version is tracked by Renovate, which auto-merges version bumps
+once CI passes.
