@@ -1,7 +1,7 @@
 ARG KUBECTL_TAG=v1.37.2@sha256:fe049faa65ae483ac200009a949a68fa4c9985daea12c9cb1195c9c7965301fc
 
 ### base container image
-FROM ubuntu:26.04@sha256:065aa8626841f16057b78b027b464cd59c4fac36c204c72dcbf48d66f5fa8a96 AS base
+FROM ubuntu:26.04 AS base
 
 LABEL org.opencontainers.image.authors="dergeberl"
 LABEL org.opencontainers.image.source=https://github.com/dergeberl/multitool-container

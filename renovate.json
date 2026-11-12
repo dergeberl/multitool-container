@@ -17,6 +17,21 @@
   ],
   "packageRules": [
     {
+      "description": "Do not pin a sha256 digest for the ubuntu base image so it stays updatable",
+      "matchManagers": [
+        "dockerfile"
+      ],
+      "matchDepNames": [
+        "ubuntu",
+        "docker.io/library/ubuntu",
+        "library/ubuntu"
+      ],
+      "pinDigests": false,
+      "pin": {
+        "enabled": false
+      }
+    },
+    {
       "description": "Auto-merge kubectl version bumps (all version levels)",
       "matchManagers": [
         "regex"
