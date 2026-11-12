@@ -65,6 +65,7 @@ jobs:
           type=raw,value=${{ steps.reltag.outputs.num }},enable=${{ inputs.version != '' }}
           type=raw,value=${{ steps.reltag.outputs.majmin }},enable=${{ inputs.version != '' }}
           type=raw,value=${{ steps.reltag.outputs.vmajmin }},enable=${{ inputs.version != '' }}
+          type=raw,value=latest,enable=${{ inputs.version != '' }}
     - name: Docker meta net
       id: docker_meta_net
       uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6
@@ -81,6 +82,7 @@ jobs:
           type=raw,value=${{ steps.reltag.outputs.num }},enable=${{ inputs.version != '' }}
           type=raw,value=${{ steps.reltag.outputs.majmin }},enable=${{ inputs.version != '' }}
           type=raw,value=${{ steps.reltag.outputs.vmajmin }},enable=${{ inputs.version != '' }}
+          type=raw,value=latest,enable=${{ inputs.version != '' }}
     - name: Docker meta kubectl
       id: docker_meta_kubectl
       uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6
@@ -97,6 +99,7 @@ jobs:
           type=raw,value=${{ steps.reltag.outputs.num }},enable=${{ inputs.version != '' }}
           type=raw,value=${{ steps.reltag.outputs.majmin }},enable=${{ inputs.version != '' }}
           type=raw,value=${{ steps.reltag.outputs.vmajmin }},enable=${{ inputs.version != '' }}
+          type=raw,value=latest,enable=${{ inputs.version != '' }}
     - name: Resolve latest kubectl version
       id: kubectl
       env:
