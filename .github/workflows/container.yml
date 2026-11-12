@@ -137,6 +137,8 @@ jobs:
         target: base
         cache-from: type=gha
         cache-to: type=gha,mode=max
+        provenance: true
+        sbom: true
     - name: Build and push network image
       id: docker_build_net
       uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7
@@ -150,6 +152,8 @@ jobs:
         target: net
         cache-from: type=gha
         cache-to: type=gha,mode=max
+        provenance: true
+        sbom: true
     - name: Build and push kubectl image
       id: docker_build_kubectl
       uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7
@@ -163,3 +167,5 @@ jobs:
         target: kubectl
         cache-from: type=gha
         cache-to: type=gha,mode=max
+        provenance: true
+        sbom: true
