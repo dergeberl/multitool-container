@@ -23,6 +23,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
     timeout-minutes: 120
+    outputs:
+      tag: ${{ steps.ver.outputs.tag }}
+      sha: ${{ steps.ver.outputs.sha }}
     steps:
     - name: Checkout
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -63,16 +66,23 @@ jobs:
         esac
         echo "tag=v$next" >> "$GITHUB_OUTPUT"
         echo "sha=$sha" >> "$GITHUB_OUTPUT"
-    - name: Build and push images
-      uses: ./.github/workflows/container.yml
-      with:
-        version: ${{ steps.ver.outputs.tag }}
-        sha: ${{ steps.ver.outputs.sha }}
+  build:
+    needs: release
+    uses: ./.github/workflows/container.yml
+    secrets: inherit
+    with:
+      version: ${{ needs.release.outputs.tag }}
+      sha: ${{ needs.release.outputs.sha }}
+  publish:
+    needs: [release, build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
     - name: Publish tag and GitHub Release
       env:
         GH_TOKEN: ${{ github.token }}
-        TAG: ${{ steps.ver.outputs.tag }}
-        SHA: ${{ steps.ver.outputs.sha }}
+        TAG: ${{ needs.release.outputs.tag }}
+        SHA: ${{ needs.release.outputs.sha }}
       run: |
         {
           echo "This release updates the packages inside the container."
