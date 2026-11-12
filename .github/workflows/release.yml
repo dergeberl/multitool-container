@@ -1,0 +1,97 @@
+name: release
+
+on:
+  schedule:
+  - cron: '0 8 1 * *'
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: 'Version bump level for this release'
+        required: true
+        default: patch
+        type: choice
+        options:
+        - patch
+        - minor
+        - major
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v7
+      with:
+        fetch-depth: 0
+    - name: Determine version and target commit
+      id: ver
+      env:
+        BUMP: ${{ inputs.bump || 'patch' }}
+      run: |
+        set -eu
+        latest=$(git tag --list 'v*' --sort=-v:refname | head -1)
+        if [ -z "$latest" ]; then
+          latest="v0.0.0"
+        fi
+        v="${latest#v}"
+        major="${v%%.*}"
+        rest="${v#*.}"
+        minor="${rest%%.*}"
+        patch="${v##*.}"
+        case "$BUMP" in
+          patch)
+            next="$major.$minor.$((patch + 1))"
+            sha=$(git rev-parse "${latest}^{commit}")
+            ;;
+          minor)
+            next="$major.$((minor + 1)).0"
+            sha=$(git rev-parse HEAD)
+            ;;
+          major)
+            next="$((major + 1)).0.0"
+            sha=$(git rev-parse HEAD)
+            ;;
+          *)
+            echo "Invalid bump level: $BUMP" >&2
+            exit 1
+            ;;
+        esac
+        echo "tag=v$next" >> "$GITHUB_OUTPUT"
+        echo "sha=$sha" >> "$GITHUB_OUTPUT"
+    - name: Build and push images
+      uses: ./.github/workflows/container.yml
+      with:
+        version: ${{ steps.ver.outputs.tag }}
+        sha: ${{ steps.ver.outputs.sha }}
+    - name: Publish tag and GitHub Release
+      env:
+        GH_TOKEN: ${{ github.token }}
+        TAG: ${{ steps.ver.outputs.tag }}
+        SHA: ${{ steps.ver.outputs.sha }}
+      run: |
+        {
+          echo "This release updates the packages inside the container."
+          echo "The container images can be downloaded from ghcr.io and docker.io"
+          echo
+          for img in multitool multitool-net multitool-kubectl; do
+            case "$img" in
+              multitool) title="Basic container" ;;
+              multitool-net) title="Network container" ;;
+              multitool-kubectl) title="Kubectl container" ;;
+            esac
+            echo "$title:"
+            echo "\`ghcr.io/dergeberl/${img}:${TAG}\`"
+            echo "\`dergeberl/${img}:${TAG}\`"
+            echo
+          done
+        } > release-body.md
+        gh release create "$TAG" \
+          --target "$SHA" \
+          --title "Release $TAG" \
+          --generate-notes \
+          --notes-file release-body.md
